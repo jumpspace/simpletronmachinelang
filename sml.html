@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!-- SML: Simpletron Machine Langauge -->
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SML - Simpletron Machine Language</title>
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1>Simpletron Machine Language</h1>
+    <p>This is a graphical display of how a machine language is processed inside a computer.</p>
+    <textarea id=taOutput rows=30 cols=100 wrap=soft readonly></textarea>
+    <br />
+    <div>Data Sign: <span id="data-sign"></span></div>
+    <div>Last Instruction: <span id="ins-ptr"></span></div>
+    <div>Last Operation: <span id="last-ins"></span></div>
+    <div>Accumulator: <span id="acc"></span></div>
+    <br />
+    <label for="codeInput"><span id="addr"></span>: <input id="codeInput" type="text" name="codeInput" />
+        <button id="nextButton" value="nextInstruction" name="nextButton" type="button"
+            onclick="parseInst()">Next</button>
+        <button id="doneButton" value="done" name="doneButton" type="button" onclick="doneCodeEntry()">Done</button>
+    </label>
+    <div><br /></div>
+    <div><br /></div>
+    <div><br /></div>
+    <table>
+        <thead>
+            <tr>
+                <th>/</th>
+                <th>0</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>D</th>
+                <th>E</th>
+                <th>F</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+                <th>13</th>
+                <th>14</th>
+                <th>15</th>
+                <th>16</th>
+                <th>17</th>
+                <th>18</th>
+                <th>19</th>
+                <th>1A</th>
+                <th>1B</th>
+                <th>1C</th>
+                <th>1D</th>
+                <th>1E</th>
+                <th>1F</th>
+                <th>20</th>
+                <th>21</th>
+                <th>22</th>
+                <th>23</th>
+                <th>24</th>
+                <th>25</th>
+                <th>26</th>
+                <th>27</th>
+                <th>28</th>
+                <th>29</th>
+                <th>2A</th>
+                <th>2B</th>
+                <th>2C</th>
+                <th>2D</th>
+                <th>2E</th>
+                <th>2F</th>
+                <th>30</th>
+                <th>31</th>
+                <th>32</th>
+                <th>33</th>
+                <th>34</th>
+                <th>35</th>
+                <th>36</th>
+                <th>37</th>
+                <th>38</th>
+                <th>39</th>
+                <th>3A</th>
+                <th>3B</th>
+                <th>3C</th>
+                <th>3D</th>
+                <th>3E</th>
+                <th>3F</th>
+                <th>40</th>
+                <th>41</th>
+                <th>42</th>
+                <th>43</th>
+                <th>44</th>
+                <th>45</th>
+                <th>46</th>
+                <th>47</th>
+                <th>48</th>
+                <th>49</th>
+                <th>4A</th>
+                <th>4B</th>
+                <th>4C</th>
+                <th>4D</th>
+                <th>4E</th>
+                <th>4F</th>
+                <th>50</th>
+                <th>51</th>
+                <th>52</th>
+                <th>53</th>
+                <th>54</th>
+                <th>55</th>
+                <th>56</th>
+                <th>57</th>
+                <th>58</th>
+                <th>59</th>
+                <th>5A</th>
+                <th>5B</th>
+                <th>5C</th>
+                <th>5D</th>
+                <th>5E</th>
+                <th>5F</th>
+                <th>60</th>
+                <th>61</th>
+                <th>62</th>
+                <th>63</th>
+                <th>64</th>
+                <th>65</th>
+                <th>66</th>
+                <th>67</th>
+                <th>68</th>
+                <th>69</th>
+                <th>6A</th>
+                <th>6B</th>
+                <th>6C</th>
+                <th>6D</th>
+                <th>6E</th>
+                <th>6F</th>
+                <th>70</th>
+                <th>71</th>
+                <th>72</th>
+                <th>73</th>
+                <th>74</th>
+                <th>75</th>
+                <th>76</th>
+                <th>77</th>
+                <th>78</th>
+                <th>79</th>
+                <th>7A</th>
+                <th>7B</th>
+                <th>7C</th>
+                <th>7D</th>
+                <th>7E</th>
+                <th>7F</th>
+                <th>80</th>
+                <th>81</th>
+                <th>82</th>
+                <th>83</th>
+                <th>84</th>
+                <th>85</th>
+                <th>86</th>
+                <th>87</th>
+                <th>88</th>
+                <th>89</th>
+                <th>8A</th>
+                <th>8B</th>
+                <th>8C</th>
+                <th>8D</th>
+                <th>8E</th>
+                <th>8F</th>
+                <th>90</th>
+                <th>91</th>
+                <th>92</th>
+                <th>93</th>
+                <th>94</th>
+                <th>95</th>
+                <th>96</th>
+                <th>97</th>
+                <th>98</th>
+                <th>99</th>
+                <th>9A</th>
+                <th>9B</th>
+                <th>9C</th>
+                <th>9D</th>
+                <th>9E</th>
+                <th>9F</th>
+                <th>A0</th>
+                <th>A1</th>
+                <th>A2</th>
+                <th>A3</th>
+                <th>A4</th>
+                <th>A5</th>
+                <th>A6</th>
+                <th>A7</th>
+                <th>A8</th>
+                <th>A9</th>
+                <th>AA</th>
+                <th>AB</th>
+                <th>AC</th>
+                <th>AD</th>
+                <th>AE</th>
+                <th>AF</th>
+                <th>B0</th>
+                <th>B1</th>
+                <th>B2</th>
+                <th>B3</th>
+                <th>B4</th>
+                <th>B5</th>
+                <th>B6</th>
+                <th>B7</th>
+                <th>B8</th>
+                <th>B9</th>
+                <th>BA</th>
+                <th>BB</th>
+                <th>BC</th>
+                <th>BD</th>
+                <th>BE</th>
+                <th>BF</th>
+                <th>C0</th>
+                <th>C1</th>
+                <th>C2</th>
+                <th>C3</th>
+                <th>C4</th>
+                <th>C5</th>
+                <th>C6</th>
+                <th>C7</th>
+                <th>C8</th>
+                <th>C9</th>
+                <th>CA</th>
+                <th>CB</th>
+                <th>CC</th>
+                <th>CD</th>
+                <th>CE</th>
+                <th>CF</th>
+                <th>D0</th>
+                <th>D1</th>
+                <th>D2</th>
+                <th>D3</th>
+                <th>D4</th>
+                <th>D5</th>
+                <th>D6</th>
+                <th>D7</th>
+                <th>D8</th>
+                <th>D9</th>
+                <th>DA</th>
+                <th>DB</th>
+                <th>DC</th>
+                <th>DD</th>
+                <th>DE</th>
+                <th>DF</th>
+                <th>E0</th>
+                <th>E1</th>
+                <th>E2</th>
+                <th>E3</th>
+                <th>E4</th>
+                <th>E5</th>
+                <th>E6</th>
+                <th>E7</th>
+                <th>E8</th>
+                <th>E9</th>
+                <th>EA</th>
+                <th>EB</th>
+                <th>EC</th>
+                <th>ED</th>
+                <th>EE</th>
+                <th>EF</th>
+                <th>F0</th>
+                <th>F1</th>
+                <th>F2</th>
+                <th>F3</th>
+                <th>F4</th>
+                <th>F5</th>
+                <th>F6</th>
+                <th>F7</th>
+                <th>F8</th>
+                <th>F9</th>
+                <th>FA</th>
+                <th>FB</th>
+                <th>FC</th>
+                <th>FD</th>
+                <th>FE</th>
+                <th>FF</th>
+            </tr>
+        </thead>
+        <tbody id="mem-core"></tbody>
+    </table>
+    <div><button id="testButton" value="popTable" type="button" onclick="memDump()">Test Table</button></div>
+    <script src="processor.js"></script>
+</body>
+
+</html>
