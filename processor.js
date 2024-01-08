@@ -1,5 +1,11 @@
 // Simpletron Machine Language
-// processor.js
+// processor.js - branch "file-loaded-prg"
+
+// node.js declarations
+const fs = require('node:fs');
+const readline = require('readline-sync');
+
+const prgFile = 'inputcode.json';
 
 // limits
 const MEMMAX = 65536;   // FFFF - Maximum memory storage for both code and data
@@ -32,65 +38,35 @@ const CODE_OFFSET = 256; // start program code at 0x0100.
 // memory
 const memory = new Array(MEMMAX);
 
-function doTest() {
-    console.log("Nothing to see here!");
+console.log("Simpletron Machine Language");
+console.log("Version 1.5");
+console.log("Original concept by Deitel's 'Java How To Program, 5th Ed.'");
+console.log("Converted to Javascript by Jumpspace Solutions");
+console.log("Copyright (c) 2023 by Patrick Wong");
+
+// initialize memory space
+for (let counter = 0; counter < memory.length; counter++) {
+    memory[counter] = "+0000";
 }
 
-function memDump() {
-    let memCell = 0;
-    let memValue = "";
-    let memTable = document.getElementById("mem-core");
-    for (let memRow = 0; memRow < HEXRDX; memRow++) {
-        let headerRow = memTable.insertRow();
-        let headerCell = headerRow.insertCell();
-        switch (memRow) {
-            case 10:
-                memValue = "A";
-                break;
-            case 11:
-                memValue = "B";
-                break;
-            case 12:
-                memValue = "C";
-                break;
-            case 13:
-                memValue = "D";
-                break;
-            case 14:
-                memValue = "E";
-                break;
-            case 15:
-                memValue = "F";
-                break;
-            default:
-                memValue = memRow.toString();
-                break;
-        }
+console.log(".  .  . Memory initialized.");
 
-        let textCell = document.createTextNode(memValue);
-        headerCell.appendChild(textCell);
-        for (let memCol = 0; memCol < HEXRDX * HEXRDX; memCol++) {
-            let itemRow = headerRow.insertCell();
-            let textValue = document.createTextNode(memory[memCell++]);
-            itemRow.appendChild(textValue);
-        }
-    }
+//read source code file into memory
+let rawCode = fs.readFileSync(prgFile, 'utf-8');
+let sourceCode = JSON.parse(rawCode);
+
+console.log("Reading file contents.  .  .");
+// Assume JSON file is: { "sml": [ { "addr": "0100",  "code": "0A01" }, { "addr": "0101", "code": "0A02" } ... ] }
+
+// populate memory space with instructions/code from file
+for (var counter = 0; counter < sourceCode.sml.length; counter++) {
+    var address = sourceCode.sml[counter].addr;
+    memory[address] = sourceCode.sml[counter].code;
 }
 
-function displayValues(instructionPtr, accumulator, instructionReg, disp) {
-    'use strict';
+console.log("Program loaded, executing. . .");
 
-    let acc, insPtr, lastIns, outputText;
-    acc = document.getElementById("acc");
-    insPtr = document.getElementById("ins-ptr");
-    lastIns = document.getElementById("last-ins");
-    outputText = document.getElementById("taOutput");
-
-    lastIns.innerText = instructionReg;
-    insPtr.innerText = instructionPtr;
-    acc.innerText = accumulator;
-    outputText.value += String.fromCharCode(13, 10) + disp;
-}
+executeCode();
 
 function executeCode() {
     'use strict';
@@ -100,7 +76,7 @@ function executeCode() {
     let accTemp = 0;
 
     // Operations
-    let instCounter = 256;    // instructions are now between memory locations 256 - 511 (0100 - 01FF)
+    let instCounter = CODE_OFFSET;    // instructions are now between memory locations 256 - 511 (0100 - 01FF)
     let instRegister = "";
     let operation = "";
     let operand = 0;
@@ -118,14 +94,14 @@ function executeCode() {
     let readSuccess = false;
 
     // Writing
-    let taDisp = document.getElementById("taOutput");
+    //let taDisp = document.getElementById("taOutput");
 
     // String manipulation
     let counter = 0;
     let strSize = 0;
     let singleChar = "";
     let outputText = "";
-
+    
     while (!haltFlag) {
         instRegister = memory[instCounter];
         operation = parseInt(instRegister.slice(0, 2), HEXRDX);
@@ -133,7 +109,9 @@ function executeCode() {
 
         switch (operation) {
             case READ:        // Read integer from input
-                inNum = prompt("Enter an integer:");
+                // inNum = prompt("Enter an integer:");
+                // TODO: use node.js methods to read integer
+                inNum = getInput("Enter an integer: ");
                 if (inNum != null && inNum != "" && !isNaN(parseInt(inNum, HEXRDX))) {
                     memory[operand] = parseInt(inNum).toString(HEXRDX).toUpperCase();
                     instCounter++;
@@ -143,7 +121,8 @@ function executeCode() {
                 }
                 break;
             case WRITE:       // Write integer to output
-                taDisp.value += parseInt(memory[operand], HEXRDX).toUpperCase().toString() + String.fromCharCode(13, 10);
+                // taDisp.value += parseInt(memory[operand], HEXRDX).toUpperCase().toString() + String.fromCharCode(13, 10);
+                console.log(parseInt(memory[operand], HEXRDX).toUpperCase().toString());
                 instCounter++;
                 break;
             case WRITESTR:    // Write string to output
@@ -158,11 +137,14 @@ function executeCode() {
                         outputText += String.fromCharCode(parseInt(singleChar, HEXRDX));
                     }
                 }
-                taDisp.value += outputText;
+                // taDisp.value += outputText;
+                console.log(outputText);
                 instCounter++;
                 break;
             case READSTR:     // Read string from input
-                inStr = prompt("Enter your text:");
+                // inStr = prompt("Enter your text:");
+                // TODO: add a console prompt for string input
+                inStr = getInput("Enter your text: ");
                 if (inStr != null && inStr != "") {
                     leftSide = inStr.length.toString(HEXRDX).toUpperCase();
                     rightSide = inStr.charCodeAt(0).toString(HEXRDX).toUpperCase();
@@ -244,10 +226,12 @@ function executeCode() {
                 }
                 break;
             case NEWLINE:     // Display a newline/carriage return
-                taDisp.value += String.fromCharCode(13, 10);
+                // taDisp.value += String.fromCharCode(13, 10);
+                console.log("\n");
                 instCounter++;
                 break;
-            case DISPSTR:     // TODO: Code this to display a string from a memory address
+            // case DISPSTR:     // TODO: Code this to display a string from a memory address
+                
                 instCounter++;
                 break;
             case HALT:        // End Program
@@ -259,19 +243,86 @@ function executeCode() {
         }
     }
 
-    displayValues(instCounter, accumulator, instRegister, "");
+    //displayValues(instCounter, accumulator, instRegister, "");
 }
 
-function setInstDisplay(memAddr) {
+function getInput(promptText) {
+    'use strict';
+
+    let intValue = readline.question(promptText);
+    return intValue;
+}
+
+/* function doTest() {
+    console.log("Nothing to see here!");
+} */
+
+/* function memDump() {
+    let memCell = 0;
+    let memValue = "";
+    let memTable = document.getElementById("mem-core");
+    for (let memRow = 0; memRow < HEXRDX; memRow++) {
+        let headerRow = memTable.insertRow();
+        let headerCell = headerRow.insertCell();
+        switch (memRow) {
+            case 10:
+                memValue = "A";
+                break;
+            case 11:
+                memValue = "B";
+                break;
+            case 12:
+                memValue = "C";
+                break;
+            case 13:
+                memValue = "D";
+                break;
+            case 14:
+                memValue = "E";
+                break;
+            case 15:
+                memValue = "F";
+                break;
+            default:
+                memValue = memRow.toString();
+                break;
+        }
+
+        let textCell = document.createTextNode(memValue);
+        headerCell.appendChild(textCell);
+        for (let memCol = 0; memCol < HEXRDX * HEXRDX; memCol++) {
+            let itemRow = headerRow.insertCell();
+            let textValue = document.createTextNode(memory[memCell++]);
+            itemRow.appendChild(textValue);
+        }
+    }
+} */
+
+/* function displayValues(instructionPtr, accumulator, instructionReg, disp) {
+    'use strict';
+
+    let acc, insPtr, lastIns, outputText;
+    acc = document.getElementById("acc");
+    insPtr = document.getElementById("ins-ptr");
+    lastIns = document.getElementById("last-ins");
+    outputText = document.getElementById("taOutput");
+
+    lastIns.innerText = instructionReg;
+    insPtr.innerText = instructionPtr;
+    acc.innerText = accumulator;
+    outputText.value += String.fromCharCode(13, 10) + disp;
+} */
+
+/* function setInstDisplay(memAddr) {
     'use strict';
 
     let nextAddr = "";
     let addrEntry = document.getElementById("addr");
     nextAddr = memAddr.toString(HEXRDX).toUpperCase();
     addrEntry.innerText = nextAddr.padStart(ADDR_FORMAT, "0");
-}
+} */
 
-function doneCodeEntry() {
+/* function doneCodeEntry() {
     'use strict';
 
     let codeIn = document.getElementById("codeInput").disabled = true;
@@ -280,9 +331,9 @@ function doneCodeEntry() {
     taDisp.value += "----- Code Entry Complete! -----" + String.fromCharCode(13, 10);
     taDisp.value += "Mode: Execution" + String.fromCharCode(13, 10);
     executeCode();
-}
+} */
 
-function parseInst() {
+/* function parseInst() {
     'use strict';
 
     let instAddr = document.getElementById("addr");
@@ -317,9 +368,9 @@ function parseInst() {
     currOp.innerText = dataValue.slice(0, 2);
     lastInst.innerText = dataValue;
     code.value = "";
-}
-
-function init() {
+} */
+ 
+/*function init() {
     'use strict';
 
     if (document && document.getElementById) {
@@ -337,6 +388,6 @@ function init() {
 
         setInstDisplay(256);
     }
-}
+}*/
 
-window.onload = init;
+// window.onload = init;
