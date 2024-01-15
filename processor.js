@@ -5,7 +5,7 @@
 const fs = require('node:fs');
 const readline = require('readline-sync');
 
-const prgFile = 'inputcode.json';
+const prgFile = 'prgfile.json';
 
 // limits
 const MEMMAX = 65536;   // FFFF - Maximum memory storage for both code and data
