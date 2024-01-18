@@ -61,10 +61,11 @@ console.log("Reading file contents.  .  .");
 // populate memory space with instructions/code from file
 for (var counter = 0; counter < sourceCode.sml.length; counter++) {
     var address = sourceCode.sml[counter].addr;
-    memory[address] = sourceCode.sml[counter].code;
+    var internalAddr = parseInt(address, HEXRDX);
+    memory[internalAddr] = sourceCode.sml[counter].code;
 }
 
-console.log("Program loaded, executing. . .");
+console.log("Program loaded, executing.  .  .");
 
 executeCode();
 
@@ -135,6 +136,9 @@ function executeCode() {
                     singleChar = memory[counter].substring(2, 4);
                     if (singleChar != "00") {
                         outputText += String.fromCharCode(parseInt(singleChar, HEXRDX));
+                    }
+                    else {
+                        outputText += " ";
                     }
                 }
                 // taDisp.value += outputText;
@@ -208,10 +212,12 @@ function executeCode() {
                 break;
             case BRANCH:      // Go to the instruction space indicated by the memory value
                 instCounter = operand + CODE_OFFSET;
+                console.log(instCounter);
                 break;
             case BRANCHNEG:   // If accumulator is negative, go to the instruction space indicated by the memory value
                 if (accumulator < 0) {
                     instCounter = operand + CODE_OFFSET;
+                    console.log(instCounter);
                 }
                 else {
                     instCounter++;
@@ -220,6 +226,7 @@ function executeCode() {
             case BRANCHZERO:  // If accumulator is zero, go to the instruction space indicated by the memory value
                 if (accumulator == 0) {
                     instCounter = operand + CODE_OFFSET;
+                    console.log(instCounter);
                 }
                 else {
                     instCounter++;
@@ -236,14 +243,16 @@ function executeCode() {
                 break;
             case HALT:        // End Program
                 haltFlag = true;
+                console.log("Program Ended.");
                 break;
             default:          // Invalid Command
                 haltFlag = true;
+                console.log("Invalid command! Program Aborted.");
                 break;
         }
     }
 
-    //displayValues(instCounter, accumulator, instRegister, "");
+    //displayValues(instCounter, accumulator, instRegister, "");    
 }
 
 function getInput(promptText) {
