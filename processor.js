@@ -212,12 +212,10 @@ function executeCode() {
                 break;
             case BRANCH:      // Go to the instruction space indicated by the memory value
                 instCounter = operand + CODE_OFFSET;
-                console.log(instCounter);
                 break;
             case BRANCHNEG:   // If accumulator is negative, go to the instruction space indicated by the memory value
                 if (accumulator < 0) {
                     instCounter = operand + CODE_OFFSET;
-                    console.log(instCounter);
                 }
                 else {
                     instCounter++;
@@ -226,7 +224,6 @@ function executeCode() {
             case BRANCHZERO:  // If accumulator is zero, go to the instruction space indicated by the memory value
                 if (accumulator == 0) {
                     instCounter = operand + CODE_OFFSET;
-                    console.log(instCounter);
                 }
                 else {
                     instCounter++;
