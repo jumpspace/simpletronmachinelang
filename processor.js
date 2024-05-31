@@ -102,7 +102,7 @@ function executeCode() {
     let strSize = 0;
     let singleChar = "";
     let outputText = "";
-    
+
     while (!haltFlag) {
         instRegister = memory[instCounter];
         operation = parseInt(instRegister.slice(0, 2), HEXRDX);
@@ -234,8 +234,8 @@ function executeCode() {
                 console.log("\n");
                 instCounter++;
                 break;
-            // case DISPSTR:     // TODO: Code this to display a string from a memory address
-                
+                // case DISPSTR:     // TODO: Code this to display a string from a memory address
+
                 instCounter++;
                 break;
             case HALT:        // End Program
@@ -258,142 +258,3 @@ function getInput(promptText) {
     let intValue = readline.question(promptText);
     return intValue;
 }
-
-/* function doTest() {
-    console.log("Nothing to see here!");
-} */
-
-/* function memDump() {
-    let memCell = 0;
-    let memValue = "";
-    let memTable = document.getElementById("mem-core");
-    for (let memRow = 0; memRow < HEXRDX; memRow++) {
-        let headerRow = memTable.insertRow();
-        let headerCell = headerRow.insertCell();
-        switch (memRow) {
-            case 10:
-                memValue = "A";
-                break;
-            case 11:
-                memValue = "B";
-                break;
-            case 12:
-                memValue = "C";
-                break;
-            case 13:
-                memValue = "D";
-                break;
-            case 14:
-                memValue = "E";
-                break;
-            case 15:
-                memValue = "F";
-                break;
-            default:
-                memValue = memRow.toString();
-                break;
-        }
-
-        let textCell = document.createTextNode(memValue);
-        headerCell.appendChild(textCell);
-        for (let memCol = 0; memCol < HEXRDX * HEXRDX; memCol++) {
-            let itemRow = headerRow.insertCell();
-            let textValue = document.createTextNode(memory[memCell++]);
-            itemRow.appendChild(textValue);
-        }
-    }
-} */
-
-/* function displayValues(instructionPtr, accumulator, instructionReg, disp) {
-    'use strict';
-
-    let acc, insPtr, lastIns, outputText;
-    acc = document.getElementById("acc");
-    insPtr = document.getElementById("ins-ptr");
-    lastIns = document.getElementById("last-ins");
-    outputText = document.getElementById("taOutput");
-
-    lastIns.innerText = instructionReg;
-    insPtr.innerText = instructionPtr;
-    acc.innerText = accumulator;
-    outputText.value += String.fromCharCode(13, 10) + disp;
-} */
-
-/* function setInstDisplay(memAddr) {
-    'use strict';
-
-    let nextAddr = "";
-    let addrEntry = document.getElementById("addr");
-    nextAddr = memAddr.toString(HEXRDX).toUpperCase();
-    addrEntry.innerText = nextAddr.padStart(ADDR_FORMAT, "0");
-} */
-
-/* function doneCodeEntry() {
-    'use strict';
-
-    let codeIn = document.getElementById("codeInput").disabled = true;
-    let nextBtn = document.getElementById("nextButton").disabled = true;
-    let taDisp = document.getElementById("taOutput");
-    taDisp.value += "----- Code Entry Complete! -----" + String.fromCharCode(13, 10);
-    taDisp.value += "Mode: Execution" + String.fromCharCode(13, 10);
-    executeCode();
-} */
-
-/* function parseInst() {
-    'use strict';
-
-    let instAddr = document.getElementById("addr");
-    let instCounter = parseInt(instAddr.innerText, HEXRDX);
-    let code = document.getElementById("codeInput");
-    let currOp = document.getElementById("ins-ptr");
-    let sign = document.getElementById("data-sign");
-    let lastInst = document.getElementById("last-ins");
-
-    let dataValue = code.value;
-    if ((code.value)[0] == "+") {
-        dataValue = (code.value).substring(1);
-        sign.innerText = "+";
-    }
-    else if ((code.value)[0] == "-") {
-        dataValue = (code.value).substring(1);
-        sign.innerText = "-";
-    }
-    else {
-        dataValue = code.value;
-        sign.innerText = "";
-    }
-
-    if (parseInt(code.value, HEXRDX) < 65536) {
-        let taAdd = document.getElementById("taOutput");
-        taAdd.value += instAddr.innerText + " -> " + code.value + String.fromCharCode(13, 10);
-
-        memory[instCounter] = dataValue;
-        ++instCounter;
-        setInstDisplay(instCounter);
-    }
-    currOp.innerText = dataValue.slice(0, 2);
-    lastInst.innerText = dataValue;
-    code.value = "";
-} */
- 
-/*function init() {
-    'use strict';
-
-    if (document && document.getElementById) {
-        for (let counter = 0; counter < memory.length; counter++) {
-            memory[counter] = "+0000";
-        }
-        let intro = document.getElementById("taOutput");
-        intro.value = "Simpletron Machine Language" + String.fromCharCode(13, 10);
-        intro.value += "Version 1.5" + String.fromCharCode(13, 10);
-        intro.value += "Original concept by Deitel's 'Java How To Program, 5th Ed.'" + String.fromCharCode(13, 10);
-        intro.value += "Converted to Javascript by Jumpspace Solutions" + String.fromCharCode(13, 10);
-        intro.value += "Copyright (c) 2023 by Patrick Wong" + String.fromCharCode(13, 10);
-        intro.value += String.fromCharCode(13, 10);
-        intro.value += "Mode: Data Entry" + String.fromCharCode(13, 10);
-
-        setInstDisplay(256);
-    }
-}*/
-
-// window.onload = init;
