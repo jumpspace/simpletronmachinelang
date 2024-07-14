@@ -253,7 +253,8 @@ function executeCode() {
 }
 
 function getInput(promptText) {
-    'use strict';
+    // Converted from Javascript -- node.js does not require 'use strict'
+    // 'use strict';
 
     let intValue = readline.question(promptText);
     return intValue;
