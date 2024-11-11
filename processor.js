@@ -70,7 +70,8 @@ console.log("Program loaded, executing.  .  .");
 executeCode();
 
 function executeCode() {
-    'use strict';
+    // Converted from Javascript -- node.js does not require 'use strict'
+    // 'use strict';
 
     // Calculations
     let accumulator = 0;
@@ -113,9 +114,11 @@ function executeCode() {
                 // inNum = prompt("Enter an integer:");
                 // TODO: use node.js methods to read integer
                 inNum = getInput("Enter an integer: ");
-                if (inNum != null && inNum != "" && !isNaN(parseInt(inNum, HEXRDX))) {
-                    memory[operand] = parseInt(inNum).toString(HEXRDX).toUpperCase();
-                    instCounter++;
+                if (inNum != null && inNum != "" && (!isNaN(parseFloat(inNum)) || !isNaN(parseInt(inNum, HEXRDX)))) {
+                    // memory[operand] = parseInt(inNum).toString(HEXRDX).toUpperCase();
+                    // save floating-point number as is into memory
+                    memory[operand] = parseFloat(inNum).
+                        instCounter++;
                 }
                 else {
                     haltFlag = true;
@@ -123,7 +126,9 @@ function executeCode() {
                 break;
             case WRITE:       // Write integer to output
                 // taDisp.value += parseInt(memory[operand], HEXRDX).toUpperCase().toString() + String.fromCharCode(13, 10);
-                console.log(parseInt(memory[operand], HEXRDX).toUpperCase().toString());
+                // console.log(parseInt(memory[operand], HEXRDX).toUpperCase().toString());
+                // display floating-point number as is
+                console.log(memory[operand].toString());
                 instCounter++;
                 break;
             case WRITESTR:    // Write string to output
@@ -147,7 +152,6 @@ function executeCode() {
                 break;
             case READSTR:     // Read string from input
                 // inStr = prompt("Enter your text:");
-                // TODO: add a console prompt for string input
                 inStr = getInput("Enter your text: ");
                 if (inStr != null && inStr != "") {
                     leftSide = inStr.length.toString(HEXRDX).toUpperCase();
@@ -193,7 +197,8 @@ function executeCode() {
                     instCounter++;
                 }
                 else {
-                    alert("ERROR: Division by Zero at address" + instCounter.toString(16));
+                    // alert("ERROR: Division by Zero at address" + instCounter.toString(16));
+                    console.log("ERROR: Division by Zero at address " + instCounter.toString(16));
                     haltFlag = true;
                 }
                 break;
