@@ -74,8 +74,8 @@ function executeCode() {
     // 'use strict';
 
     // Calculations
-    let accumulator = 0;
-    let accTemp = 0;
+    let accumulator = 0.0;
+    let accTemp = 0.0;
 
     // Operations
     let instCounter = CODE_OFFSET;    // instructions are now between memory locations 256 - 511 (0100 - 01FF)
@@ -113,12 +113,12 @@ function executeCode() {
             case READ:        // Read integer from input
                 // inNum = prompt("Enter an integer:");
                 // TODO: use node.js methods to read integer
-                inNum = getInput("Enter an integer: ");
+                inNum = getInput("Enter a number: ");
                 if (inNum != null && inNum != "" && (!isNaN(parseFloat(inNum)) || !isNaN(parseInt(inNum, HEXRDX)))) {
                     // memory[operand] = parseInt(inNum).toString(HEXRDX).toUpperCase();
                     // save floating-point number as is into memory
-                    memory[operand] = parseFloat(inNum).
-                        instCounter++;
+                    memory[operand] = parseFloat(inNum);
+                    instCounter++;
                 }
                 else {
                     haltFlag = true;
@@ -176,26 +176,35 @@ function executeCode() {
                 }
                 break;
             case LOAD:        // Load value from memory to accumulator
-                accumulator = parseInt(memory[operand], HEXRDX);
+                //accumulator = parseInt(memory[operand], HEXRDX);
+                //accumulator = parseInt(memory[operand]);
+                accumulator = memory[operand];
                 instCounter++;
                 break;
             case STORE:       // Store value from accumulator to memory
-                memory[operand] = accumulator.toString(HEXRDX);
+                //memory[operand] = accumulator.toString(HEXRDX);
+                memory[operand] = accumulator;
                 instCounter++;
                 break;
             case ADD:         // Add memory value to accumulator
-                accumulator += parseInt(memory[operand], HEXRDX);
+                //accumulator += parseInt(memory[operand], HEXRDX);
+                accumulator += memory[operand];
                 instCounter++;
                 break;
             case SUBTRACT:    // Subtract memory value from accumulator
-                accumulator -= parseInt(memory[operand], HEXRDX);
+                //accumulator -= parseInt(memory[operand], HEXRDX);
+                accumulator -= memory[operand];
                 instCounter++;
                 break;
             case DIVIDE:      // Divide accumulator by memory value
-                if (memory[operand] != "00") {
-                    accumulator /= parseInt(memory[operand], HEXRDX);
+                //if (memory[operand] != "00") {
+                if (memory[operand] != 0.0) {
+                    accumulator /= memory[operand];
                     instCounter++;
                 }
+                //     accumulator /= parseInt(memory[operand], HEXRDX);
+                //     instCounter++;
+                // }
                 else {
                     // alert("ERROR: Division by Zero at address" + instCounter.toString(16));
                     console.log("ERROR: Division by Zero at address " + instCounter.toString(16));
@@ -203,16 +212,22 @@ function executeCode() {
                 }
                 break;
             case MULTIPLY:    // Multiply accumulator by memory value
-                accumulator *= parseInt(memory[operand], HEXRDX);
+                //accumulator *= parseInt(memory[operand], HEXRDX);
+                accumulator *= memory[operand];
                 instCounter++;
                 break;
             case REMAINDER:   // Find the remainder of dividing accumulator by memory value
-                accumulator %= parseInt(memory[operand], HEXRDX);
-                instCounter++;
+                //accumulator %= parseInt(memory[operand], HEXRDX);
+                //instCounter++;
+                if (memory[operand] != 0.0) {
+                    accumulator %= memory[operand];
+                    instCounter++;
+                }
                 break;
             case EXPONENT:    // Raise the accumulator by the power of memory value
                 accTemp = accumulator;
-                accumulator = Math.pow(accTemp, parseInt(memory[operand], HEXRDX));
+                //accumulator = Math.pow(accTemp, parseInt(memory[operand], HEXRDX));
+                accumulator = Math.pow(accTemp, memory[operand]);
                 instCounter++;
                 break;
             case BRANCH:      // Go to the instruction space indicated by the memory value
