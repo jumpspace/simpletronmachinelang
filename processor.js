@@ -234,7 +234,7 @@ function executeCode() {
                 instCounter = operand + CODE_OFFSET;
                 break;
             case BRANCHNEG:   // If accumulator is negative, go to the instruction space indicated by the memory value
-                if (accumulator < 0) {
+                if (accumulator < 0.0) {
                     instCounter = operand + CODE_OFFSET;
                 }
                 else {
@@ -242,7 +242,7 @@ function executeCode() {
                 }
                 break;
             case BRANCHZERO:  // If accumulator is zero, go to the instruction space indicated by the memory value
-                if (accumulator == 0) {
+                if (accumulator == 0.0) {
                     instCounter = operand + CODE_OFFSET;
                 }
                 else {
